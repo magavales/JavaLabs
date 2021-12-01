@@ -1,0 +1,35 @@
+{
+    // Используйте IntelliSense, чтобы узнать о возможных атрибутах.
+    // Наведите указатель мыши, чтобы просмотреть описания существующих атрибутов.
+    // Для получения дополнительной информации посетите: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}",
+            "vmArgs": "-ea"
+        },
+        {
+            "type": "java",
+            "name": "Launch Complex",
+            "request": "launch",
+            "mainClass": "Complex",
+            "projectName": "complex_23704e4c"
+        },
+        {
+            "type": "java",
+            "name": "Launch ComplexTest",
+            "request": "launch",
+            "mainClass": "ComplexTest",
+            "projectName": "complex_23704e4c"
+        },
+        {
+            "type": "java",
+            "name": "Launch ComplexNumberTest",
+            "request": "launch",
+            "mainClass": "ComplexNumberTest"
+        }
+    ]
+}
