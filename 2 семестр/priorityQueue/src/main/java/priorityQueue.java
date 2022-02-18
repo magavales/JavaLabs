@@ -31,6 +31,11 @@ public class priorityQueue<T extends Comparable<T>> {
         }
     }
 
+    /**
+     * Проверяет очередь на пустоту
+     *
+     * @param data - элемент, который необходимо вставить в очередь
+     */
     public void insertHeap(T data){
         int parent = 1;
         heapArray.add(data);
@@ -53,33 +58,54 @@ public class priorityQueue<T extends Comparable<T>> {
                 break;
             }
             if (heapArray.get(parent).compareTo(heapArray.get(child)) < 0){
-                T temp = heapArray.get(child);
-                heapArray.set(child, heapArray.get(parent));
-                heapArray.set(parent, temp);
+                swap(child, parent);
                 child = parent;
             }
         }
     }
-    public void checkEmpty(){
-        if(heapArray.size() == 0){
-            System.out.print("Heap is empty!\n");
-        }
-        else{
-            System.out.print("Heap isn't empty!\n");
-        }
+    public void swap(int child, int parent){
+        T temp = heapArray.get(child);
+        heapArray.set(child, heapArray.get(parent));
+        heapArray.set(parent, temp);
     }
+
+    /**
+     * Проверка очереди на пустоту
+     *
+     * @return Возвращает True, если очередь пуста, и False - в противном случае.
+     */
+    public boolean isEmpty(){
+        return heapArray.isEmpty();
+    }
+
+    /**
+     * Получение количества элементов в очереди
+     *
+     * @return Возвращает размер очереди.
+     */
     public int getCountElem(){
         return heapArray.size();
     }
+
+    /**
+     * Проверяет очередь на пустоту
+     *
+     * @param data - элемент, который необходимо удалить из очереди.
+     */
     public void delElem(T data){
         int child = 0, parent = 0, count = 0, delIndex = 0;
         delIndex = heapArray.indexOf(data);
+
         if(delIndex == heapArray.size() - 1){
             heapArray.remove(data);
         }
         else {
+            heapArray.remove(delIndex);
+            heapArray.add(delIndex, heapArray.get(heapArray.size() - 1));
+            heapArray.remove(heapArray.size() - 1);
+
             parent = delIndex;
-            heapArray.set(delIndex, null);
+
             while (true) {
                 if (2 * parent + 1 > heapArray.size() - 1){
                     break;
@@ -87,20 +113,32 @@ public class priorityQueue<T extends Comparable<T>> {
                 if (2 * parent + 2 > heapArray.size() - 1 && 2 * parent + 1 > heapArray.size() - 1){
                     break;
                 }
-                if (heapArray.get(2 * parent + 1).compareTo(heapArray.get(2 * parent + 2)) > 0) {
-                    heapArray.set(parent, heapArray.get(2 * parent + 1));
-                    heapArray.set(2 * parent + 1, null);
-                    parent = 2 * parent + 1;
+                if (2 * parent + 2 > heapArray.size() - 1){
+                    if(heapArray.get(parent).compareTo(heapArray.get(2 * parent + 1)) < 0){
+                        swap(2 * parent + 1, parent);
+                    }
+                    break;
                 }
-                else{
-                    heapArray.set(parent, heapArray.get(2 * parent + 2));
-                    heapArray.set(2 * parent + 2, null);
-                    parent = 2 * parent + 2;
+                if(heapArray.get(parent).compareTo(heapArray.get(2 * parent + 1)) < 0) {
+                    if (heapArray.get(2 * parent + 1).compareTo(heapArray.get(2 * parent + 2)) > 0) {
+                        swap(parent, 2 * parent + 1);
+                        parent = 2 * parent + 1;
+                    } else {
+                        swap(parent, 2 * parent + 2);
+                        parent = 2 * parent + 2;
+                    }
+                } else{
+                    break;
                 }
-
             }
         }
     }
+
+    /**
+     * Проверяет очередь на пустоту
+     *
+     * @return Возвращает максимальный элемент очереди.
+     */
     public T getMaxElem(){
         return heapArray.get(0);
     }
