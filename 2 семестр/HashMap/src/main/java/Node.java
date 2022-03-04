@@ -1,9 +1,15 @@
 public class Node <K extends Comparable<K>, V extends Comparable<V>> {
-    int hash;
-    K key;
-    V value;
-    Node<K, V> next;
+    int hash;               //хэш
+    K key;                  //значение ключа
+    V value;                //данные
+    Node<K, V> next;        //ссылка на следущий элемент
 
+    /**
+     * Конструктор ячейки таблицы
+     * @param key Ключ
+     * @param value Значение
+     * @param hash Хэш
+     */
     public Node(K key, V value, int hash){
         this.key = key;
         this.value = value;
@@ -16,6 +22,4 @@ public class Node <K extends Comparable<K>, V extends Comparable<V>> {
                 (value==null ? 0 : value.hashCode());
     }
 
-    void recordRemoval(HashMap<K,V> m) {
-    }
 }

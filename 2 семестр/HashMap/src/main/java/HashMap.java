@@ -9,10 +9,10 @@ public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
     static final int MIN_TREEIFY_CAPACITY = 64;
 
     transient Node<K, V>[] table;
-    int size;
-    int threshold;
-    float loadFactor;
-    int bucketCount = 0;
+    int size;                           //количество элементов
+    int threshold;                      //предельное количество элементов, при достижение которого таблица перехэшировается
+    float loadFactor;                   //степень загруженности
+    int bucketCount = 0;                //количество связных списков
 
     /**
      * Конструктор по умолчанию
@@ -50,6 +50,16 @@ public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
         table = new Node[initialCapacity];
     }
 
+    public HashMap(HashMap<K,V> map) {
+        this(map.table.length, map.loadFactor);
+
+        for (int i = 0; i < map.table.length; i++){
+            for (Node<K, V> temp = map.table[i]; temp != null; temp = temp.next){
+                this.put(temp.key, temp.value);
+            }
+        }
+    }
+
     /**
      * Помещает новую пару ключ-значение в {@code hashmap}
      * @param key Ключ
@@ -57,7 +67,7 @@ public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
      */
     public void put(K key, V value){
         int hashCode = hash(key.hashCode());
-        int index = (table.length - 1) & hashCode;
+        int index = hashCode & (table.length - 1);
         Node<K, V> newNode = new Node<>(key, value, hashCode);
 
         if(table == null){
@@ -66,6 +76,7 @@ public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
         else {
             if (table[index] == null){
                 table[index] = newNode;
+                size++;
             }
             else{
                 if (table[index].hash == newNode.hash && table[index].key == newNode.key) {
@@ -73,11 +84,15 @@ public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
                 }
                 if (table[index].hash == newNode.hash && table[index].key != newNode.key){
                     table[index].next = newNode;
+                    size++;
+                }
+                if (table[index].hash != newNode.hash && table[index].key != newNode.key){
+                    table[index].next = newNode;
+                    size++;
                 }
             }
         }
 
-        size++;
         if (checkTable() == false){
             resize(2 * table.length + 1);
         }
@@ -99,44 +114,51 @@ public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
         return null;
     }
 
-    public V remove(K key) {
-        Node<K,V> e = removeNodeForKey(key);
-        return (e == null ? null : e.value);
-    }
-
-    public Node<K, V> removeNodeForKey(K key){
-        int hash = hash(key.hashCode());
-        int i = (table.length - 1) & hash;
-        Node<K,V> temp = table[i];
-        Node<K,V> e = temp;
+    /**
+     * Удаляет ячейку по ключу из {@code hashmap}
+     * @param key Ключ
+     */
+    public void remove(K key){
+        int hash = (key == null) ? 0 : hash(key.hashCode());
+        int i = hash & (table.length - 1);
+        Node<K,V> prev = table[i];
+        Node<K,V> e = prev;
 
         while (e != null) {
             Node<K,V> next = e.next;
             Object k;
             if (e.hash == hash && (e.key == key || (key != null && key.equals(e.key)))) {
                 size--;
-                if (temp == e)
+                if (prev == e)
                     table[i] = next;
                 else
-                    temp.next = next;
-                e.recordRemoval(this);
-                return e;
+                    prev.next = next;
             }
-            temp = e;
+            prev = e;
             e = next;
         }
-
-        return e;
     }
 
+    /**
+     * Получение числа элементов из {@code hashmap}
+     * @return Число элементов
+     */
     public int getSize(){
         return this.size;
     }
 
+    /**
+     * Получение максимальной загруженности из {@code hashmap}
+     * @return Максимальная загруженность
+     */
     public float getLoadFactor(){
         return this.loadFactor;
     }
 
+    /**
+     * Изменение максимальное загруженности в {@code hashmap}
+     * @param newLoadFactor Новое значение максимальной загруженности
+     */
     public void newLoadFactor(float newLoadFactor){
         this.loadFactor = newLoadFactor;
     }
@@ -151,6 +173,10 @@ public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
         size = 0;
     }
 
+    /**
+     * Переносит все записи из текущей таблицы в новую таблицу
+     * @param newTable Новая таблица
+     */
     public void transfer(Node<K, V>[] newTable){
         Node[] src = table;
         int newCapacity = newTable.length;
@@ -160,7 +186,7 @@ public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
                 src[j] = null;
                 do {
                     Node<K,V> next = e.next;
-                    int i = (table.length - 1) & e.hash;
+                    int i = e.hash & (table.length - 1);
                     e.next = newTable[i];
                     newTable[i] = e;
                     e = next;
@@ -169,6 +195,10 @@ public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
         }
     }
 
+    /**
+     * Перехэширование элементов текущей таблицы в новую таблицу
+     * @param newCapacity Новый размер таблицы
+     */
     public void resize(int newCapacity){
         if (table.length == MAXIMUM_CAPACITY)
         {
@@ -182,19 +212,26 @@ public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
         threshold = (int)(newCapacity * loadFactor);
     }
 
+    /**
+     * Проверка таблицы на необходимость проводить перехэширование
+     * @return true
+     */
     public boolean checkTable(){
+        int count = 0;
+
         Node<K, V> tempNode;
         if (size > threshold){
             return false;
         }
         for (int i = 0; i < table.length; i++){
             if (table[i] != null){
+                tempNode = table[i];
                 for (int binCount = 0; ; binCount++){
                     if (binCount == 1){
-                        bucketCount++;
+                        count++;
                     }
-                    if (table[i].next != null){
-                        tempNode = table[i].next;
+                    if (tempNode.next != null){
+                        tempNode = tempNode.next;
                     }
                     else {
                         break;
@@ -203,12 +240,18 @@ public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
                         return false;
                     }
                 }
+                bucketCount = count;
             }
         }
 
         return true;
     }
 
+    /**
+     * Вычисление хэша ключа
+     * @param h Хэш код ключа, вычисленный при помощи встроенной функции
+     * @return Хэш код ключа
+     */
     public int hash(int h){
         h ^= (h >>> 20) ^ (h >>> 12);
         return h ^ (h >>> 7) ^ (h >>> 4);
