@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Objects;
 
 public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
@@ -164,6 +165,15 @@ public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
     }
 
     /**
+     * Проверка очереди на пустоту
+     *
+     * @return Возвращает True, если очередь пуста, и False - в противном случае.
+     */
+    public boolean isEmpty(){
+        return size == 0;
+    }
+
+    /**
      * Удаляет все элементы из {@code hashmap}
      */
     public void clear() {
@@ -214,7 +224,7 @@ public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
 
     /**
      * Проверка таблицы на необходимость проводить перехэширование
-     * @return true
+     * @return true - если необходимо произвести перехэширование, false - в противном случае
      */
     public boolean checkTable(){
         int count = 0;
@@ -257,6 +267,18 @@ public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
         return h ^ (h >>> 7) ^ (h >>> 4);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HashMap<?, ?> hashMap = (HashMap<?, ?>) o;
+        return size == hashMap.size && threshold == hashMap.threshold && Float.compare(hashMap.loadFactor, loadFactor) == 0 && bucketCount == hashMap.bucketCount && Arrays.equals(table, hashMap.table);
+    }
 
-
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(size, threshold, loadFactor, bucketCount);
+        result = 31 * result + Arrays.hashCode(table);
+        return result;
+    }
 }
