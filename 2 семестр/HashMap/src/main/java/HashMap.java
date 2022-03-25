@@ -4,10 +4,8 @@ import java.util.Objects;
 public class HashMap <K extends Comparable<K>, V extends Comparable<V>> {
     static final int DEFAULT_INITIAL_CAPACITY= 1 << 4;
     static final int MAXIMUM_CAPACITY = 1 << 30;
-    static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    static final float DEFAULT_LOAD_FACTOR = 2.0f;
     static final int TREEIFY_THRESHOLD = 8;
-    static final int UNTREEIFY_THRESHOLD = 6;
-    static final int MIN_TREEIFY_CAPACITY = 64;
 
     transient Node<K, V>[] table;
     int size;                           //количество элементов
