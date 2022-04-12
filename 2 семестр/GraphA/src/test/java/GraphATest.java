@@ -228,7 +228,6 @@ public class GraphATest {
         test.addEdge("F", "D", 6);
         test.addEdge("G", "E", 9);
 
-        Algorithms.KruskalAlgorithm(graph).equals(test);
         Assertions.assertTrue(Algorithms.KruskalAlgorithm(graph).equals(test));
     }
 

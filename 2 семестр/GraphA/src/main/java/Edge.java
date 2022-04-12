@@ -9,6 +9,7 @@ public class Edge <T> implements Comparable<Edge<T>>{
         this.nameVertexFrom = nameVertexFrom;
         this.nameVertexTo = nameVertexTo;
         this.weight = weight;
+
     }
 
     @Override

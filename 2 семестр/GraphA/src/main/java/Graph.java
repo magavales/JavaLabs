@@ -108,6 +108,7 @@ public class Graph <T extends Comparable<T>>{
                 return vertexList.get(indexFrom).edges.get(i).weight;
             }
         }
+
         return 0;
     }
 

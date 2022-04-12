@@ -17,6 +17,7 @@ public class Node <T extends Comparable<T>>{
                     return x.nameVertexFrom.compareTo(y.nameVertexFrom);
                 }
             });
+
             return true;
         }
     };

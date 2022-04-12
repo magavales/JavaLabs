@@ -36,6 +36,7 @@ public class Main {
         graph.addEdge("G", "F", 11);
         graph.addEdge("G", "E", 9);
 
+
         Algorithms.PrimAlgorithm(graph, "D");
     }
 }
