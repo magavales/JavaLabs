@@ -286,7 +286,6 @@ public class Algorithms {
             }
         }
 
-
         return result;
     }
 }
