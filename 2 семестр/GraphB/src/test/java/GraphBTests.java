@@ -304,17 +304,21 @@ class GraphBTest {
         graph.addVertex(5);
         graph.addVertex(6);
 
+        // #4 component
+        graph.addVertex(7);
 
         graph.addEdge(0, 1);
         graph.addEdge(1, 2);
         graph.addEdge(2, 0);
         graph.addEdge(2, 3);
         graph.addEdge(4, 3);
+        graph.addEdge(4, 7);
         graph.addEdge(4, 5);
         graph.addEdge(6, 4);
         graph.addEdge(5, 6);
+        graph.addEdge(6, 7);
 
-        // [0, 1, 2] [3] [4, 5, 6]
+        // [0, 1, 2] [3] [4, 5, 6] [7]
         List<ArrayList<Integer>> expect = new ArrayList<>();
         expect.add(new ArrayList<>(Arrays.asList(4, 6, 5)));
         expect.add(new ArrayList<>(Arrays.asList(0, 2, 1)));
