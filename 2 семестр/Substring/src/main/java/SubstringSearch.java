@@ -1,6 +1,8 @@
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.function.ToIntFunction;
+import java.security.MessageDigest;
 
 public class SubstringSearch {
 
@@ -89,7 +91,7 @@ public class SubstringSearch {
         return result.toArray(new Integer[0]);
     }
 
-    public static Integer[] rabinKarp(String string, String substring) {
+    public static Integer[] rabinKarp(String string, String substring) throws NoSuchAlgorithmException {
         Objects.requireNonNull(string);
         Objects.requireNonNull(substring);
         int substringLength = substring.length();
@@ -114,18 +116,22 @@ public class SubstringSearch {
         return result.toArray(new Integer[0]);
     }
 
-    public static BigInteger hashRabinKarp(String string, BigInteger prime) {
-        Iterator<Integer> iterator = string.chars().iterator();
-        BigInteger result = BigInteger.ZERO;
-        BigInteger subsum = BigInteger.ZERO;
-        int m = string.length();
-        // hash = c1 * p^m-1 + c2 * p^m-2 + c3 * p^m-3 + ... + cm * p^0
-        for (int i = 0; i < m; i++) {
-            int n = iterator.next();
-            subsum = prime.pow(m - i - 1).multiply(BigInteger.valueOf(n)); // p^m-i-1 * ci
-            result = result.add(subsum);
+    public static BigInteger hashRabinKarp(String string, BigInteger prime) throws NoSuchAlgorithmException {
+        MessageDigest messageDigest = null;
+        byte[] digest = new byte[0];
+
+        try {
+            messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest.reset();
+            messageDigest.update(string.getBytes());
+            digest = messageDigest.digest();
+        } catch (NoSuchAlgorithmException e) {
+            // тут можно обработать ошибку
+            // возникает она если в передаваемый алгоритм в getInstance(,,,) не существует
+            e.printStackTrace();
         }
-        return result;
+
+        return new BigInteger(1, digest);
     }
 
     public static Integer[] knuthMorrisPratt(String string, String pattern) {

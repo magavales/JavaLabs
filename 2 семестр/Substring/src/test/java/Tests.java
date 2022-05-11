@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.stream.IntStream;
 
 public class Tests {
@@ -64,7 +65,7 @@ public class Tests {
 
     @Test
     @DisplayName("RabinKarp: All in one (.polynomialHash)")
-    void Substring_rabinKarp_allInOne_polynomialHash() {
+    void Substring_rabinKarp_allInOne_polynomialHash() throws NoSuchAlgorithmException {
         for(Utils.TestCases test : testCases) {
             Assertions.assertArrayEquals(test.expected, SubstringSearch.rabinKarp(test.string, test.pattern));
         }
