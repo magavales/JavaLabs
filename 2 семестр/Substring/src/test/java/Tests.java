@@ -16,9 +16,7 @@ public class Tests {
             new Utils.TestCases("abababababa",                   "ab",              new Integer[]{0, 2, 4, 6, 8}),
             new Utils.TestCases("aaaaaaaaaaa",                   "aaa",             new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8}),
             new Utils.TestCases("Pabcabcabcabcabc",              "abcabcabcabcabc", new Integer[]{1}),
-            new Utils.TestCases("get set put yet pet wet let",   "et",              new Integer[]{1, 5, 13, 17, 21, 25}),
             new Utils.TestCases("",                              "",                new Integer[]{}),
-//            new Utils.TestCases("aaa",                           "",                new Integer[]{}), // may expect Exception or empty Array
             new Utils.TestCases("aaabbbcccaabbccabc",            "aab",             new Integer[]{1, 9}),
             new Utils.TestCases("aaaaaaaaaaaaaaaaaa",            "b",               new Integer[]{}),
             new Utils.TestCases("abcabcabbcabcabcabcab",         "abcab",           new Integer[]{0, 3, 10, 13, 16}),
@@ -34,14 +32,6 @@ public class Tests {
                             "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
                             "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "a",
                     IntStream.rangeClosed(0, 255).boxed().toList().toArray(new Integer[0])),
-            new Utils.TestCases(
-                    "Какой то большой текст об очень интересных вещах. Кажется, что это" +
-                            "просто текст для теста, но может это что то больше. Ведь этот "+
-                            "небольшой абзац мог быть частью какой то книги о теории тестир-" +
-                            "ровании. Может это абзац из теории TDD. А может это вообще нахо-" +
-                            "дится в официальной документации JUnit... Или все же это просто " +
-                            "тест в очередной лабараторной студента по программированию",
-                    "те", new Integer[]{17, 34, 73, 83, 177, 184, 219, 319})
     };
 
     @Test

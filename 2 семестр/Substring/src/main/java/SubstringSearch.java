@@ -117,21 +117,17 @@ public class SubstringSearch {
     }
 
     public static BigInteger hashRabinKarp(String string, BigInteger prime) throws NoSuchAlgorithmException {
-        MessageDigest messageDigest = null;
-        byte[] digest = new byte[0];
-
-        try {
-            messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.reset();
-            messageDigest.update(string.getBytes());
-            digest = messageDigest.digest();
-        } catch (NoSuchAlgorithmException e) {
-            // тут можно обработать ошибку
-            // возникает она если в передаваемый алгоритм в getInstance(,,,) не существует
-            e.printStackTrace();
+        Iterator<Integer> iterator = string.chars().iterator();
+        BigInteger d = BigInteger.valueOf(26);
+        BigInteger result = BigInteger.ZERO;
+        BigInteger subsum = BigInteger.ZERO;
+        int m = string.length();
+        for (int i = 0; i < m; i++) {
+            int n = iterator.next();
+            subsum = d.multiply(subsum).add(BigInteger.valueOf(n)).mod(prime); // p^m-i-1 * ci
+            result = result.add(subsum);
         }
-
-        return new BigInteger(1, digest);
+        return result;
     }
 
     public static Integer[] knuthMorrisPratt(String string, String pattern) {
